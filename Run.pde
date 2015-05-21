@@ -52,25 +52,19 @@ void draw() {
 
   if (keyPressed && playerY == 275) {                                                                     // When key is pressed and player is on the ground...
     jump = true;                                                                                          // Player is now jumping
-   // println("jumping...");
+   println("jumping...");
   }
 
-  if (jump == true) {                                                                                      // If player is jumping...
-    playerSpeed = playerSpeed - 1;                                                                         // Speed of player increases                                                                    // Player moves
+  if (jump == true) {                                                                                     // If player is jumping...
+    playerSpeed = playerSpeed - 0.2;                                                                      // Speed of player increases                                                                    // Player moves
   } 
 
-  if (playerY <= 200) {
-    jump = false;                                                                                            // If the player reaches 200 high...
-    playerY = 199;                                                                                          // Speed of player invertes
-    playerSpeed = 1.1;
+  if (playerY <= 150) {                                                                                   // If the player reaches 200 high...
+    jump = false;                                                                                         // Player is no longer jumping, but falling
+    playerY = 149;                                                                                        // Speed of player invertes
+    playerSpeed = playerSpeed * -0.5;                                                                     
   }
   println(playerSpeed);
 
-  playerY += playerSpeed;
-}
-
-void keyPressed() {
-}
-
-void keyReleased() {
+  playerY = playerY + playerSpeed;                                                                        // Player's speed effects the player's position
 }
