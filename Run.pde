@@ -1,6 +1,8 @@
 //Nick Jones
 
-float playerX = 0;                                                                                        // Tracking X position of player
+float cloudX = 0;                                                                                         // Tracking X position of first cloud
+float cloudY = 0;                                                                                         // Tracking Y position of first cloud
+float playerX = 200;                                                                                      // Tracking X position of player
 float playerY = 0;                                                                                        // Tracking Y position of player
 float objectX1 = 0;                                                                                       // Tracking X position of first obstacle
 float objectX2 = 0;                                                                                       // Tracking Y position of second obstacle       
@@ -9,18 +11,24 @@ float objectY2 = 0;                                                             
 float delay1 = random(500, 1000);                                                                         // Delay for the first object entering screen
 float delay2 = random(500);                                                                               // Delay for the second object entering screen
 float speed = 0;                                                                                          // Speed of objects
+float gravity = 0.1;
+float acceleration = 20;
 
 void setup() {
   size(1000, 300);                                                                                        // Drawing a canvas
 
   objectX1 = width + 1000 + delay1;                                                                       // First object starts beyond width
   objectX2 = width + 1000;                                                                                // Second object starts beyond width
-  
+
+  playerY = 275;
+
   speed = 5;
 }
 
 void draw() {
   background(225);                                                                                        // Constantly drawing background
+
+  ellipse(playerX, playerY, 50, 50);
 
   objectX1 = objectX1 - speed;                                                                            // First object has a speed every frame
   objectX2 = objectX2 - speed;                                                                            // Second object has a speed every frame
@@ -30,7 +38,18 @@ void draw() {
 
   if (objectX1 < 0)                                                                                       // When first object hits left boarder...
     objectX1 = width + delay1;                                                                            // It is re-drawn with a delay
-    
+
   if (objectX2 < 0)                                                                                       // When second object hits left boarder...
     objectX2 = width + delay2;                                                                            // It is re-drawn with a delay
+}
+
+void keyPressed() {
+  
+  playerY = 200;
+}
+
+void keyReleased() {
+
+  playerY = playerY + acceleration;
+  acceleration = acceleration + gravity;
 }
