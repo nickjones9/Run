@@ -19,7 +19,7 @@ float delay3 = random(1000, 2000);                                              
 float speed = 0;                                                                                          // Speed of objects
 float gravity = 0;                                                                                        // 
 float acceleration = 0;                                                                                   // Speed of objects
-float playerYspeed = 1;                                                                                   // Speed of player while jumping
+float playerYspeed = 5;                                                                                   // Speed of player while jumping
 float playerDiameter;                                                                                     // 
 float objectDiameter;                                                                                     // Diameter of objectts
 float objectDiameter1;                                                                                    // Diameter of first object
@@ -34,7 +34,7 @@ void setup() {
   objectX3 = width + 1000 + delay3;                                                                       // Second object starts beyond width
 
   playerY = 275;                                                                                          // Player starts at 275
-  playerYspeed = 0;                                                                                       // Speed of player starts at 1;
+  // playerYspeed = 1;                                                                                       // Speed of player starts at 1;
   speed = 5;                                                                                              // Speed of objects are set to 5
   playerDiameter = 50;                                                                                    // Setting diameter objects
   objectDiameter1 = 50;                                                                                   // Setting diameter of first object
@@ -55,11 +55,6 @@ void draw() {
   ellipse(objectX2, objectY2, objectDiameter2, objectDiameter2);                                          // Second object is drawn
   ellipse(objectX3, objectY3, objectDiameter3, objectDiameter3);                                          // Third object is drawn
 
-  if (playerY >= 275) {
-    playerYspeed = 0;
-    playerY = 275;
-  } 
-
   if (objectX1 < 0)                                                                                       // When first object hits left boarder...
     objectX1 = width + delay1;                                                                            // It is re-drawn with a delay
 
@@ -72,17 +67,22 @@ void draw() {
   }
 
   if (jump == true) {                                                                                     // If player is jumping...
-    playerYspeed = playerYspeed - 1;                                                                      // Speed of player increases                                                                    // Player moves
+    playerY = playerY - playerYspeed;                                                                     // Speed of player decreases
   } 
 
   if (playerY <= 150) {                                                                                   // If the player reaches 200 high...
-    jump = false;                                                                                         // Player is no longer jumping, but falling
-    playerY = 149;                                                                                        // Speed of player invertes
-    playerYspeed = playerYspeed * -1;                                                                     // Speed of player invertes
+    jump = false;                                                                                         // Player is no longer jumping
+    fall = true;                                                                                          // Player is now falling
   }
-  // println(playerSpeed);
 
-  playerY = playerY + playerYspeed;                                                                       // Player's speed effects the player's position
+  if (fall == true) {                                                                                     // If player is jumping...
+    playerY = playerY + playerYspeed;                                                                     // Speed of player increases/invertes             
+  } 
+
+  if (playerY >= 275) {      
+    jump = false;
+    fall = false;
+  }
 
   if (sqrt(sq(objectX1-playerX)+sq(objectY1-playerY)) < (objectDiameter1+playerDiameter)/2) {             // Using Pythag Therom to look for collisions with obj 1
     noLoop();                                                                                             // Stop looping when collision occors
