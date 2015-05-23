@@ -19,7 +19,7 @@ float delay3 = random(1000, 2000);                                              
 float speed = 0;                                                                                          // Speed of objects
 float gravity = 0;                                                                                        // 
 float acceleration = 0;                                                                                   // Speed of objects
-float playerYspeed = 0;                                                                                   // Speed of player while jumping
+float playerYspeed = 1;                                                                                   // Speed of player while jumping
 float playerDiameter;                                                                                     // 
 float objectDiameter;                                                                                     // Diameter of objectts
 float objectDiameter1;                                                                                    // Diameter of first object
@@ -78,7 +78,7 @@ void draw() {
   if (playerY <= 150) {                                                                                   // If the player reaches 200 high...
     jump = false;                                                                                         // Player is no longer jumping, but falling
     playerY = 149;                                                                                        // Speed of player invertes
-    playerYspeed = playerYspeed + 5;
+    playerYspeed = playerYspeed * -1;                                                                     // Speed of player invertes
   }
   // println(playerSpeed);
 
