@@ -1,5 +1,6 @@
 //Nick Jones
 
+boolean duck = false;
 boolean collision = false;
 boolean jump = false;                                                                                     // Track when collision has occored
 boolean fall = false;                                                                                     // Track when player is falling
@@ -12,7 +13,7 @@ float objectX2 = 0;                                                             
 float objectX3 = 0;                                                                                       // Tracking Y position of yhird obstacle   
 float objectY1 = 275;                                                                                     // Tracking X position of first obstacle
 float objectY2 = 275;                                                                                     // Tracking Y position of second obstacle
-float objectY3 = 225;                                                                                     // Tracking Y position of third obstacle
+float objectY3 = 250;                                                                                     // Tracking Y position of third obstacle
 float delay1 = random(500);                                                                               // Delay for the first object entering screen
 float delay2 = random(500, 1000);                                                                         // Delay for the second object entering screen
 float delay3 = random(1000, 2000);                                                                        // Delay for the third object entering screen
@@ -25,6 +26,7 @@ float objectDiameter;                                                           
 float objectDiameter1;                                                                                    // Diameter of first object
 float objectDiameter2;                                                                                    // Diameter of second object
 float objectDiameter3;                                                                                    // Diameter of third object
+float slide;
 
 void setup() {
   size(1000, 300);                                                                                        // Drawing a canvas
@@ -45,9 +47,9 @@ void setup() {
 void draw() {
   background(225);                                                                                        // Constantly drawing background
 
-  ellipse(playerX, playerY, 50, 50);                                                                      // Drawing player
+  ellipse(playerX, playerY, playerDiameter, playerDiameter);                                              // Drawing player
 
-  objectX1 = objectX1 - speed;                                                                            // First object has a speed for every frame
+    objectX1 = objectX1 - speed;                                                                          // First object has a speed for every frame
   objectX2 = objectX2 - speed;                                                                            // Second object has a speed for every frame
   objectX3 = objectX3 - speed;                                                                            // Third object has a speed for every frame
 
@@ -61,9 +63,14 @@ void draw() {
   if (objectX2 < 0)                                                                                       // When second object hits left boarder...
     objectX2 = width + delay2;                                                                            // It is re-drawn with a delay
 
-  if (keyPressed && playerY == 275) {                                                                     // When key is pressed and player is on the ground...
+  if (keyCode == UP && playerY == 275) {                                                                  // When key is pressed and player is on the ground...
     jump = true;                                                                                          // Player is now jumping
     println("jumping...");
+  }
+
+  if (keyCode == DOWN && playerY == 275) {                                                                // When down key is pressed...
+    duck = true;                                                                                          // Player is now ducking
+    println("ducking...");
   }
 
   if (jump == true) {                                                                                     // If player is jumping...
@@ -76,13 +83,26 @@ void draw() {
   }
 
   if (fall == true) {                                                                                     // If player is jumping...
-    playerY = playerY + playerYspeed;                                                                     // Speed of player increases/invertes             
+    playerY = playerY + playerYspeed;                                                                     // Speed of player increases/invertes
   } 
 
-  if (playerY >= 275) {      
-    jump = false;
-    fall = false;
+  if (duck == true) {                                                                                     // If the player is ducking...
+    slide = slide + 1;                                                                                    // Increase slide time
+    playerY = 325 - slide;                                                                                // Slide time has impact on playerY
   }
+
+  if (slide == 50) {                                                                                      // When slide reaches 50
+    slide = 0;                                                                                            // Slide number will reset
+  }
+
+  if (playerY == 275) {                                                                                   // When player hits the ground...
+    jump = false;                                                                                         // Stop the jump (just in case)
+    fall = false;                                                                                         // Stop the fall
+    duck = false;                                                                                         // Stop the duck
+  }
+
+  if (jump == false && fall == false && duck == false)                                                    // When player is on ground
+    keyCode = CODED;                                                                                      // KeyCode is reset
 
   if (sqrt(sq(objectX1-playerX)+sq(objectY1-playerY)) < (objectDiameter1+playerDiameter)/2) {             // Using Pythag Therom to look for collisions with obj 1
     noLoop();                                                                                             // Stop looping when collision occors
